@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {TouchableWithoutFeedback, View} from 'react-native';
 import Animated from 'react-native-reanimated';
 
@@ -55,10 +55,7 @@ export type Props = {
 const AttachmentImage = ({imageUrl, imageMetadata, layoutWidth, location, postId, theme}: Props) => {
     const galleryIdentifier = `${postId}-AttachmentImage-${location}`;
     const [error, setError] = useState(false);
-    const fileId = useRef<string | null>(null);
-    if (fileId.current === null) {
-        fileId.current = `uid-${urlSafeBase64Encode(imageUrl)}`;
-    }
+    const fileId = useMemo(() => `uid-${urlSafeBase64Encode(imageUrl)}`, [imageUrl]);
     const isTablet = useIsTablet();
     const {height, width} = calculateDimensions(imageMetadata.height, imageMetadata.width, layoutWidth || getViewPortWidth(false, isTablet, true));
     const style = getStyleSheet(theme);
